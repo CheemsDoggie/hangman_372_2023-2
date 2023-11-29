@@ -1,38 +1,57 @@
-# Import modules to use
-from words import palabras
 import random
+import string
+from words import palabras
 
-# 1. Welcome
-print("Welcome to the game hangman in Python")
+def welcome():
+    print("Welcome to the hangman game in Python")
 
-# 2. Function to get word
-def get_valid_word(palabras):
-  word = random.choice(palabras)
+def get_valid_word(words):
+    word = random.choice(words)
+    while '-' in word or ' ' in word:
+        word = random.choice(words)
+    return word.upper()  # Convertir la palabra a mayúsculas
 
-  # Choose a good word
-  while '-' in word or ' ' in word: # While - or ' '
-    word = random.choice(palabras)
-
-  return word
+def display_word(word, guessed_letters):
+    display = ''
+    for letter in word:
+        if letter in guessed_letters:
+            display += letter + ' '
+        else:
+            display += '_ '
+    return display.strip()
 
 def hangman():
+    welcome()
 
-  word = get_valid_word(palabras) # SOL
-  word_letters = set(word) # S, O , L
-  alphabet = set(string.ascii_uppercase) # A, B, C, D, E,...
-  used_letters = set()
-  lives = 6
+    word_to_guess = get_valid_word(palabras)
+    word_letters = set(word_to_guess)
+    alphabet = set(string.ascii_uppercase)
+    guessed_letters = set()
+    lives = 6
 
+    print("Word to guess:", display_word(word_to_guess, guessed_letters))
 
-# Display word and its length
-my_word = get_valid_word(palabras)
-print(my_word + '\n',len(my_word))
+    while lives > 0:
+        guess = input("Guess a letter: ").upper()  # Convertir la letra a mayúsculas
 
+        if guess in alphabet - guessed_letters:
+            guessed_letters.add(guess)
+            if guess not in word_letters:
+                lives -= 1
 
-# Una función que despliegue los guiones
-# dependiendo el tamaño de la palabra
-# Ejemplo:
-# A N O N Y M O U S
-# _ _ _ _ _ _ _ _ _
-print("-"*len(my_word))
+            current_display = display_word(word_to_guess, guessed_letters)
+            print(current_display)
 
+            if set(word_letters).issubset(guessed_letters):
+                print("Congratulations! You guessed the word:", word_to_guess)
+                break
+        else:
+            print("Invalid input. Please enter a valid letter.")
+
+        print("Lives left:", lives)
+
+        if lives == 0:
+            print("Sorry, you ran out of lives. The word was:", word_to_guess)
+
+if __name__ == "__main__":
+    hangman()
