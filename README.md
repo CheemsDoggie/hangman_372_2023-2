@@ -1,4 +1,4 @@
-# HANGMAN_372_2023-2 WITH PYTHON
+# HANGMAN_372_2023-2 WITH PYTHON 🐍🧍‍♂️
 
 > Programacion con Python. Ejercicio colaborativo Pull Request (PR) para examen ordinario 2023-2 grupo 372.
 >
