@@ -15,6 +15,15 @@ def get_valid_word(palabras):
 
   return word
 
+def hangman():
+
+  word = get_valid_word(palabras) # SOL
+  word_letters = set(word) # S, O , L
+  alphabet = set(string.ascii_uppercase) # A, B, C, D, E,...
+  used_letters = set()
+  lives = 6
+
+
 # Display word and its length
 my_word = get_valid_word(palabras)
 print(my_word + '\n',len(my_word))
@@ -26,3 +35,4 @@ print(my_word + '\n',len(my_word))
 # A N O N Y M O U S
 # _ _ _ _ _ _ _ _ _
 print("-"*len(my_word))
+
