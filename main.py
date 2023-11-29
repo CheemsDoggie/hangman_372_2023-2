@@ -1,5 +1,6 @@
 import random
 import string
+
 from words import palabras
 
 def welcome():
