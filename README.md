@@ -4,6 +4,9 @@
 >
 > Hangman build with python language
 
+## Descripción del Proyecto
+El clásico juego del ahorcado desarrollado en Python. Este proyecto es un esfuerzo colaborativo para implementar el juego con funcionalidades básicas, proporcionando una experiencia divertida y educativa.
+
 ---
 ## STEPS:
 1. Welcome
