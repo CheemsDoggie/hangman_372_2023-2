@@ -1,53 +1,58 @@
-# Import modules to use
-from words import palabras
 import random
 import string
 
-# 1. Welcome
-print("Welcome to the game hangman in Python")
+from words import palabras
 
-# 2. Function to get word
-def get_valid_word(palabras):
-    word = random.choice(palabras)
+def welcome():
+    print("Welcome to the hangman game in Python")
+
+def get_valid_word(words):
+    word = random.choice(words)
     while '-' in word or ' ' in word:
-        word = random.choice(palabras)
-    return word.upper()
+        word = random.choice(words)
+    return word.upper()  # Convertir la palabra a mayúsculas
+
+def display_word(word, guessed_letters):
+    display = ''
+    for letter in word:
+        if letter in guessed_letters:
+            display += letter + ' '
+        else:
+            display += '_ '
+    return display.strip()
 
 def hangman():
-    word = get_valid_word(palabras)
-    word_letters = set(word)  # Letras de la palabra
+    welcome()
+
+    word_to_guess = get_valid_word(palabras)
+    word_letters = set(word_to_guess)
     alphabet = set(string.ascii_uppercase)
-    used_letters = set()  # Lo que el usuario ha adivinado
+    guessed_letters = set()
     lives = 6
 
-    # Bucle principal del juego
-    while len(word_letters) > 0 and lives > 0:
-        # Letras utilizadas
-        # ' '.join(['a', 'b', 'cd']) --> 'a b cd'
-        print("You have", lives, "lives left and you have used these letters: ", ' '.join(used_letters))
+    print("Word to guess:", display_word(word_to_guess, guessed_letters))
 
-        # Mostrar el estado actual de la palabra
-        word_list = [letter if letter in used_letters else '-' for letter in word]
-        print("Current word: ", ' '.join(word_list))
+    while lives > 0:
+        guess = input("Guess a letter: ").upper()  # Convertir la letra a mayúsculas
 
-        # Obtener la entrada del usuario
-        user_letter = input("Guess a letter: ").upper()
-        if user_letter in alphabet - used_letters:
-            used_letters.add(user_letter)
-            if user_letter in word_letters:
-                word_letters.remove(user_letter)
-            else:
-                lives -= 1  # Resta una vida si la letra no está en la palabra
-        elif user_letter in used_letters:
-            print("You have already used that letter. Please try again.")
+        if guess in alphabet - guessed_letters:
+            guessed_letters.add(guess)
+            if guess not in word_letters:
+                lives -= 1
+
+            current_display = display_word(word_to_guess, guessed_letters)
+            print(current_display)
+
+            if set(word_letters).issubset(guessed_letters):
+                print("Congratulations! You guessed the word:", word_to_guess)
+                break
         else:
-            print("Invalid character. Please try again.")
+            print("Invalid input. Please enter a valid letter.")
 
-    # Llega al final del juego
-    if lives == 0:
-        print("You died, sorry. The word was", word)
-    else:
-        print("You guessed the word", word, "!!")
+        print("Lives left:", lives)
 
-# Iniciar el juego
-hangman()
+        if lives == 0:
+            print("Sorry, you ran out of lives. The word was:", word_to_guess)
+
+if __name__ == "__main__":
+    hangman()

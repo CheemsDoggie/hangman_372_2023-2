@@ -1,0 +1,44 @@
+[33mcommit 90d26a30c29f5769d98f1fa88b9d1ffe8590b2c5[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 22a8243 12674e1
+Author: CheemsDoggie <91161169+CheemsDoggie@users.noreply.github.com>
+Date:   Tue Nov 28 20:40:03 2023 -0800
+
+    Merge pull request #1 from LivMaster13/main
+    
+    agregue el archivo words.py con las palabras para el juego de hangman
+
+[33mcommit 12674e1a9df6bc0db9d70d56ccb56cfec02d3f06[m
+Author: LivMaster13 <livier.orozco@uabc.edu.mx>
+Date:   Tue Nov 28 20:33:29 2023 -0800
+
+    agregue el archivo words.py con las palabras para el juego de hangman
+
+[33mcommit 22a82434172ffb7fcdff6304723095feec656d37[m
+Author: CheemsDoggie <91161169+CheemsDoggie@users.noreply.github.com>
+Date:   Tue Nov 28 18:29:43 2023 -0800
+
+    Update main.py, add main function
+
+[33mcommit f638ec2235722a7912a46f60edb2bc0de20f4791[m
+Author: CheemsDoggie <91161169+CheemsDoggie@users.noreply.github.com>
+Date:   Tue Nov 28 18:25:46 2023 -0800
+
+    Create main.py and basic logic hangman game
+
+[33mcommit fd5f2c563ab5eca8b454e1059b013994674b23fa[m
+Author: CheemsDoggie <91161169+CheemsDoggie@users.noreply.github.com>
+Date:   Tue Nov 28 18:22:21 2023 -0800
+
+    Update README.md
+
+[33mcommit 5d216f4e90c928d238db3af88e00b18fe142a25d[m
+Author: CheemsDoggie <91161169+CheemsDoggie@users.noreply.github.com>
+Date:   Tue Nov 28 18:21:22 2023 -0800
+
+    Update README.md
+
+[33mcommit 181205453830ce374c2db87ab8eba1335952a7c9[m
+Author: CheemsDoggie <91161169+CheemsDoggie@users.noreply.github.com>
+Date:   Tue Nov 28 18:11:57 2023 -0800
+
+    Initial commit
