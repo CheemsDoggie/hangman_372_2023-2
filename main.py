@@ -22,6 +22,10 @@ def display_word(word, guessed_letters):
             display += '_ '
     return display.strip()
 
+def display_incorrect_guesses(incorrect_guesses):
+    return 'Letras incorrectas: ' + ' '.join(incorrect_guesses)
+
+
 def hangman():
     welcome()
 
@@ -29,6 +33,7 @@ def hangman():
     word_letters = set(word_to_guess)
     alphabet = set(string.ascii_uppercase)
     guessed_letters = set()
+    incorrect_guesses = set()
     lives = 6
 
     while lives > 0:
@@ -37,6 +42,7 @@ def hangman():
 
         current_display = display_word(word_to_guess, guessed_letters)
         print(current_display)
+        print(display_incorrect_guesses(incorrect_guesses))
 
         guess = input("Guess a letter: ").upper()  # Convertir la letra a mayúsculas
 
@@ -44,6 +50,7 @@ def hangman():
             guessed_letters.add(guess)
             if guess not in word_letters:
                 lives -= 1
+                incorrect_guesses.add(guess)
 
             if set(word_letters).issubset(guessed_letters):
                 print(hangmanASCI[lives]);
