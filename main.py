@@ -1,5 +1,3 @@
-# Import modules to use
-from words import palabras
 import random
 from flask import Flask, render_template
 
@@ -15,38 +13,73 @@ def hangman():
 if __name__ == '__main__':
     app.run(debug=True)
 
+import string
 
-# 1. Welcome
-print("Welcome to the game hangman in Python")
+from resources import palabras
+from resources import hangmanASCI
 
-# 2. Function to get word
-def get_valid_word(palabras):
-  word = random.choice(palabras)
+def welcome():
+    print("Welcome to the hangman game in Python")
 
-  # Choose a good word
-  while '-' in word or ' ' in word: # While - or ' '
-    word = random.choice(palabras)
+def get_valid_word(words):
+    word = random.choice(words)
+    while '-' in word or ' ' in word:
+        word = random.choice(words)
+    return word.upper()  # Convertir la palabra a mayúsculas
 
-  return word
+def display_word(word, guessed_letters):
+    display = 'Word to guess: '
+    for letter in word:
+        if letter in guessed_letters:
+            display += letter + ' '
+        else:
+            display += '_ '
+    return display.strip()
+
+def display_incorrect_guesses(incorrect_guesses):
+    return 'Letras incorrectas: ' + ' '.join(incorrect_guesses)
+
 
 def hangman():
+    welcome()
 
-  word = get_valid_word(palabras) # SOL
-  word_letters = set(word) # S, O , L
-  alphabet = set(string.ascii_uppercase) # A, B, C, D, E,...
-  used_letters = set()
-  lives = 6
+    word_to_guess = get_valid_word(palabras)
+    word_letters = set(word_to_guess)
+    alphabet = set(string.ascii_uppercase)
+    guessed_letters = set()
+    incorrect_guesses = set()
+    lives = 6
 
+    while lives > 0:
+        # Monito Hangaman en ASCI
+        print(hangmanASCI[lives]);
 
-# Display word and its length
-my_word = get_valid_word(palabras)
-print(my_word + '\n',len(my_word))
+        current_display = display_word(word_to_guess, guessed_letters)
+        print(current_display)
+        print(display_incorrect_guesses(incorrect_guesses))
 
+        guess = input("Guess a letter: ").upper()  # Convertir la letra a mayúsculas
 
-# Una función que despliegue los guiones
-# dependiendo el tamaño de la palabra
-# Ejemplo:
-# A N O N Y M O U S
-# _ _ _ _ _ _ _ _ _
-print("-"*len(my_word))
+        if guess in alphabet - guessed_letters:
+            guessed_letters.add(guess)
+            if guess not in word_letters:
+                lives -= 1
+                incorrect_guesses.add(guess)
 
+            if set(word_letters).issubset(guessed_letters):
+                print(hangmanASCI[lives]);
+                print("Congratulations! You guessed the word:", word_to_guess)
+                break
+        elif guess in guessed_letters:
+            print("You have already guessed that letter, try again.")
+        else: 
+            print("Invalid input. Please enter a valid letter.")
+
+        print("Lives left:", lives)
+
+        if lives == 0:
+            print(hangmanASCI[lives]);
+            print("Sorry, you ran out of lives. The word was:", word_to_guess)
+
+if __name__ == "__main__":
+    hangman()
