@@ -1,0 +1,9 @@
+Karla:2
+Luis:6
+Raul:8
+Ana:6
+Manuel:6
+Amanda:6
+Oscar:6
+Susana:8
+Flor:12

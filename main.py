@@ -4,6 +4,8 @@ import string
 from resources import palabras
 from resources import hangmanASCI
 
+puntos_por_letra = 2
+
 def welcome():
     print("Welcome to the hangman game in Python")
 
@@ -25,6 +27,25 @@ def display_word(word, guessed_letters):
 def display_incorrect_guesses(incorrect_guesses):
     return 'Letras incorrectas: ' + ' '.join(incorrect_guesses)
 
+# Calculo de puntaje de acuerdo al numero de letras adivinadas correctamente
+def calculate_score(word_to_guess, guessed_letters):
+    return sum(puntos_por_letra for letter in guessed_letters if letter in word_to_guess)
+
+# Ordena y muestra los 5 mejores puntajes encontrados
+def get_top_scores():
+    try:
+        with open("scores.txt", "r") as file:
+            scores = [line.strip().split(":") for line in file]
+            scores = [(name, int(score)) for name, score in scores]
+            scores.sort(key=lambda x: x[1], reverse=True)
+            return scores[:5]
+    except FileNotFoundError:
+        return []
+
+# Guarda el puntaje en el archivo scores
+def save_score(name, score):
+    with open("scores.txt", "a") as file:
+        file.write(f"{name}:{score}\n")
 
 def hangman():
     welcome()
@@ -56,6 +77,7 @@ def hangman():
                 print(hangmanASCI[lives]);
                 print("Congratulations! You guessed the word:", word_to_guess)
                 break
+
         elif guess in guessed_letters:
             print("You have already guessed that letter, try again.")
         else: 
@@ -65,7 +87,23 @@ def hangman():
 
         if lives == 0:
             print(hangmanASCI[lives]);
-            print("Sorry, you ran out of lives. The word was:", word_to_guess)
+            print("Sorry, you ran out of lives. The word was:", word_to_guess)   
+
+    # Calcular y mostrar puntos
+    score = calculate_score(word_to_guess, guessed_letters)
+    print("Your score:", score)
+
+    # Pedir el nombre del jugador
+    player_name = input("Enter your name: ")
+
+    # Guardar el nombre del jugador y su puntaje
+    save_score(player_name, score)
+
+    # Mostrar los mejores puntajes
+    top_scores = get_top_scores()
+    print("\nTop 5 Scores:")
+    for i, (name, score) in enumerate(top_scores, start=1):
+        print(f"{i}. {name}: {score} points")
 
 if __name__ == "__main__":
     hangman()
