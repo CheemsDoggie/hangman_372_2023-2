@@ -1,4 +1,4 @@
-[
+palabras =[
   "a",
   "ability",
   "able",

@@ -1,6 +1,20 @@
 # Import modules to use
 from words import palabras
 import random
+from flask import Flask, render_template
+
+# Crea una instancia de la aplicación Flask
+app = Flask(__name__)
+
+# Define una ruta básica
+@app.route('/')
+def hangman():
+    return render_template('index.html')
+
+# Punto de entrada para la aplicación Flask
+if __name__ == '__main__':
+    app.run(debug=True)
+
 
 # 1. Welcome
 print("Welcome to the game hangman in Python")
