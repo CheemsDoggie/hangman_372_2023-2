@@ -38,7 +38,7 @@ def hangman():
 
     while lives > 0:
         # Monito Hangaman en ASCI
-        print(hangmanASCI[lives]);
+        print(hangmanASCI[ 6 - lives])
 
         current_display = display_word(word_to_guess, guessed_letters)
         print(current_display)
@@ -53,7 +53,7 @@ def hangman():
                 incorrect_guesses.add(guess)
 
             if set(word_letters).issubset(guessed_letters):
-                print(hangmanASCI[lives]);
+                print(hangmanASCI[6 - lives])
                 print("Congratulations! You guessed the word:", word_to_guess)
                 break
         elif guess in guessed_letters:
@@ -64,7 +64,7 @@ def hangman():
         print("Lives left:", lives)
 
         if lives == 0:
-            print(hangmanASCI[lives]);
+            print(hangmanASCI[6 - lives])
             print("Sorry, you ran out of lives. The word was:", word_to_guess)
 
 if __name__ == "__main__":
