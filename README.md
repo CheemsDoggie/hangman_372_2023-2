@@ -26,3 +26,15 @@ Improvements:
 
 1.  Print the man's ascii art
 2.  Improve README.md
+
+
+# Cambios
+### Bojorges Eddy
+
+Realice cambios en el main.py agregando el 6 - lives para que este imprimiera 
+correctamente los hangman y quite los ; que estaban en los mismo. 
+
+```python
+print(hangmanASCI[ 6 - lives])
+```
+Ademas modifique el archivo resources.py, de la parte de los hangman. Nada que destacar.
