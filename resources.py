@@ -1,8 +1,4 @@
-<<<<<<< HEAD:words.py
-palabras =[
-=======
 palabras=[
->>>>>>> 9099fd22887bb5adfe32ddf13d11960232ee17fc:resources.py
   "a",
   "ability",
   "able",

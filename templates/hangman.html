@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://pyscript.net/releases/2023.11.1/core.css" />
+    <title>Salva a la Bruja</title>
+</head>
+<body class="d-flex align-items-center justify-content-center vh-100">
+
+<div class="text-center">
+    <center><h1 class="text-light fw-bolder fs-1 mb-5 rounded-pill py-2 w-50">SALVA A LA BRUJA</h1></center>
+
+    <div class="card mb-3" style="max-width: 100%;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='bruja.png') }}" class="img-fluid rounded-start" alt="Bruja">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body text-light">
+                    <h5 class="card-title fs-2 fw-bold">Vidas:
+                        {% for _ in range(game_state['lives']) %}
+                            <i class="bi bi-heart-fill text-danger"></i>
+                        {% endfor %}
+                    </h5>
+
+                    <h5 class="card-title fs-2 fw-bold my-5">La palabra a adivinar es:</h5>
+
+                    <div class="d-flex justify-content-center align-items-center">
+                        {% for letter in game_state['word_to_guess'] %}
+                            {% if letter in game_state['guessed_letters'] %}
+                                <p class="card-text fs-1 me-3">{{ letter }}</p>
+                            {% else %}
+                                <p class="card-text fs-1 me-3">____</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <form method="post" action="{{ url_for('guess_letter') }}">
+                        <label for="letter" class="form-label fs-1 mt-5">Ingrese una letra:</label>
+                        <center><input type="text" class="form-control fs-1 w-25" pattern="[A-Za-z]" title="Enter A letter" id="letter" name="letter" maxlength="1" required></center>
+                        
+                        <!-- Move this block inside the form to match the ID with the result from Python -->
+                        <div id="result-section" class="mt-3">
+                            {% if result %}
+                                <h3 class="text-danger">{{ result }}</h3>
+                                {% set result = None %}  <!-- Reinicia result después de ser mostrado -->
+                            {% endif %}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success mt-3 fs-1 mt-5">Check letter</button>
+                    </form>
+
+                    <div id="outcome-section" class="mt-3">
+                        {% if game_state['wins'] > 0 %}
+                            <p class="fs-2 text-success">¡Felicidades! Has ganado {{ game_state['wins'] }} veces.</p>
+                        {% elif game_state['losses'] > 0 %}
+                            <p class="fs-2 text-danger">Lo siento, has perdido {{ game_state['losses'] }} veces.</p>
+                        {% else %}
+                            <p class="fs-2 text-info">Buena suerte, ¡a jugar!</p>
+                        {% endif %}
+                    </div>
+
+                    <div id="restart-section" class="mt-3">
+                        <a href="{{ url_for('restart_game') }}" class="btn btn-warning fs-2">Restart Game</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Agregar script para limpiar result -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var resultMessage = document.getElementById('result-message');
+        if (resultMessage) {
+            setTimeout(function () {
+                resultMessage.textContent = '';
+            }, 3000);  // Limpiar result después de 5 segundos (ajustar según sea necesario)
+        }
+    });
+</script>
+
+<script type="module" src="https://pyscript.net/releases/2023.11.1/core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

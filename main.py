@@ -1,31 +1,15 @@
 import random
-from flask import Flask, render_template
-
-# Crea una instancia de la aplicación Flask
-app = Flask(__name__)
-
-# Define una ruta básica
-@app.route('/')
-def hangman():
-    return render_template('index.html')
-
-# Punto de entrada para la aplicación Flask
-if __name__ == '__main__':
-    app.run(debug=True)
-
 import string
-
 from resources import palabras
-from resources import hangmanASCI
+from flask import Flask, render_template, request, redirect, url_for
 
-def welcome():
-    print("Welcome to the hangman game in Python")
+app = Flask(__name__, static_url_path='/static')
 
 def get_valid_word(words):
     word = random.choice(words)
     while '-' in word or ' ' in word:
         word = random.choice(words)
-    return word.upper()  # Convertir la palabra a mayúsculas
+    return word.upper()
 
 def display_word(word, guessed_letters):
     display = 'Word to guess: '
@@ -37,49 +21,80 @@ def display_word(word, guessed_letters):
     return display.strip()
 
 def display_incorrect_guesses(incorrect_guesses):
-    return 'Letras incorrectas: ' + ' '.join(incorrect_guesses)
+    return 'Incorrect guesses: ' + ' '.join(incorrect_guesses)
 
+# Definir una variable global para almacenar el estado del juego
+game_state = None
 
+@app.route('/')
 def hangman():
-    welcome()
+    global game_state
 
-    word_to_guess = get_valid_word(palabras)
-    word_letters = set(word_to_guess)
-    alphabet = set(string.ascii_uppercase)
-    guessed_letters = set()
-    incorrect_guesses = set()
-    lives = 6
+    if game_state is None:
+        # Iniciar un nuevo juego
+        word_to_guess = get_valid_word(palabras)
+        word_letters = set(word_to_guess)
+        game_state = {
+            'word_to_guess': word_to_guess,
+            'word_letters': word_letters,
+            'alphabet': set(string.ascii_uppercase),
+            'guessed_letters': set(),
+            'incorrect_guesses': set(),
+            'lives': 6,
+            'wins': 0,
+            'losses': 0
+        }
 
-    while lives > 0:
-        # Monito Hangaman en ASCI
-        print(hangmanASCI[lives]);
+    # Obtener el estado actual del juego
+    current_display = display_word(game_state['word_to_guess'], game_state['guessed_letters'])
+    incorrect_guesses_display = display_incorrect_guesses(game_state['incorrect_guesses'])
 
-        current_display = display_word(word_to_guess, guessed_letters)
-        print(current_display)
-        print(display_incorrect_guesses(incorrect_guesses))
+    return render_template('hangman.html', game_state=game_state, display=current_display, incorrect_guesses=incorrect_guesses_display, result=None)
 
-        guess = input("Guess a letter: ").upper()  # Convertir la letra a mayúsculas
+@app.route('/guess', methods=['POST'])
+def guess_letter():
+    global game_state
 
-        if guess in alphabet - guessed_letters:
-            guessed_letters.add(guess)
-            if guess not in word_letters:
-                lives -= 1
-                incorrect_guesses.add(guess)
+    if game_state is None:
+        return "Game not started"
 
-            if set(word_letters).issubset(guessed_letters):
-                print(hangmanASCI[lives]);
-                print("Congratulations! You guessed the word:", word_to_guess)
-                break
-        elif guess in guessed_letters:
-            print("You have already guessed that letter, try again.")
-        else: 
-            print("Invalid input. Please enter a valid letter.")
+    # Obtener la letra adivinada del formulario
+    guess = request.form.get('letter').upper()
 
-        print("Lives left:", lives)
+    # Realizar la lógica de adivinanza aquí
+    if guess in game_state['alphabet'] - game_state['guessed_letters']:
+        game_state['guessed_letters'].add(guess)
+        if guess not in game_state['word_letters']:
+            game_state['lives'] -= 1
+            game_state['incorrect_guesses'].add(guess)
 
-        if lives == 0:
-            print(hangmanASCI[lives]);
-            print("Sorry, you ran out of lives. The word was:", word_to_guess)
+    if set(game_state['word_letters']).issubset(game_state['guessed_letters']):
+        game_state['wins'] += 1
+        result = "Congratulations! You guessed the word: " + game_state['word_to_guess']
+        restart_game()
+        return redirect(url_for('hangman', result=result))
 
-if __name__ == "__main__":
-    hangman()
+    elif guess in game_state['guessed_letters']:
+        result = "You have already guessed that letter, try again."
+        return redirect(url_for('hangman', result=result))
+
+    elif guess not in game_state['alphabet']:
+        result = "Invalid input. Please enter a valid letter."
+        return redirect(url_for('hangman', result=result))
+
+    if game_state['lives'] == 0:
+        game_state['losses'] += 1
+        result = "Sorry, you ran out of lives. The word was: " + game_state['word_to_guess']
+        restart_game()
+        return redirect(url_for('hangman', result=result))
+
+    return redirect(url_for('hangman'))
+
+@app.route('/restart')
+def restart_game():
+    global game_state
+    game_state = None
+    return redirect(url_for('hangman'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
