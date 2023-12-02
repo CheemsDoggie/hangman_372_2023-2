@@ -3,6 +3,17 @@ import string
 from resources import palabras
 from resources import hangmanASCI
 
+
+
+def reveal_letter(word_letters, guessed_letters, incorrect_guesses):
+    incorrect_count = len(incorrect_guesses)
+    if incorrect_count >= 2:
+        for letter in word_letters:
+            if letter not in guessed_letters:
+                return letter
+    return None
+
+
 def welcome():
     print("Welcome to the hangman game in Python")
 
@@ -44,6 +55,8 @@ def save_stats(wins, losses):
 def display_stats(wins, losses):
     print(f"Wins: {wins} | Losses: {losses}")  # Muestra las estadísticas de victorias y derrotas
 
+
+
 def hangman():
     welcome()
     wins, losses = load_stats()
@@ -70,6 +83,11 @@ def hangman():
                 if guess not in word_letters:
                     lives -= 1
                     incorrect_guesses.add(guess)
+
+                letter_to_reveal = reveal_letter(word_letters, guessed_letters, incorrect_guesses)
+                if letter_to_reveal:
+                    print(f"Oops! You've made 2 incorrect guesses. Here's a letter: {letter_to_reveal}")
+                    guessed_letters.add(letter_to_reveal)
 
                 if set(word_letters).issubset(guessed_letters):
                     print(hangmanASCI[6 - lives])

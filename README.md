@@ -98,4 +98,26 @@ play_again = input("Do you want to play again? (yes/no): ").upper()
 ```
 
 
-## hola
+# Escobedo Jonathan
+
+Esta funcion detecta cuando se equivoca 2 veces y revela una letra en modo de pista.
+
+```python
+def reveal_letter(word_letters, guessed_letters, incorrect_guesses):
+    incorrect_count = len(incorrect_guesses)
+    if incorrect_count >= 2:
+        for letter in word_letters:
+            if letter not in guessed_letters:
+                return letter
+    return None
+
+```
+
+aqui se detecta atravez de un IF cuando el jugador se equivoca 2 veces y ejecuta la funcion.
+
+```python
+ letter_to_reveal = reveal_letter(word_letters, guessed_letters, incorrect_guesses)
+                if letter_to_reveal:
+                    print(f"Oops! You've made 2 incorrect guesses. Here's a letter: {letter_to_reveal}")
+                    guessed_letters.add(letter_to_reveal)
+```
