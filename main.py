@@ -8,7 +8,6 @@ def welcome():
 def get_valid_word(words):                                  
     word = random.choice(words)
     if word.isalpha:                    # evalua si la palabra de la lista sólo contiene letras
-        print(word)
         return word.upper()             # devuelve la palabra en mayúsculas
     else:                               # si no: selecciona otra palabra de la lista
         get_valid_word(words)
