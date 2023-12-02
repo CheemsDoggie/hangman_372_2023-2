@@ -2,6 +2,10 @@ import random
 import string
 from resources import palabras
 from resources import hangmanASCI
+from colorama import Fore, Style, init
+
+# Inicializar colorama
+init(autoreset=True)
 
 def welcome():
     print("Welcome to the hangman game in Python")
@@ -16,13 +20,10 @@ def display_word(word, guessed_letters):
     display = 'Word to guess: '
     for letter in word:
         if letter in guessed_letters:
-            display += letter + ' '
+            display += f'{Fore.GREEN}{letter} '  # Letras correctas en verde
         else:
-            display += '_ '
+            display += f'{Fore.WHITE}_ '  # Letras no adivinadas en blanco
     return display.strip()
-
-def display_incorrect_guesses(incorrect_guesses):
-    return 'Letras incorrectas: ' + ' '.join(incorrect_guesses)
 
 # Función para cargar estadísticas desde un archivo
 def load_stats():
@@ -34,20 +35,14 @@ def load_stats():
     except FileNotFoundError:  
         return 0, 0  
 
+def display_incorrect_guesses(incorrect_guesses):
+    return f'{Fore.RED}Incorrect guesses: {Style.BRIGHT}' + ' '.join(incorrect_guesses)  # Letras incorrectas en rojo
 
-# Función para guardar estadísticas en un archivo
-def save_stats(wins, losses):
-    with open("stats.txt", "w") as file:
-        file.write(f"{wins}\n{losses}")  
-
-# Función para mostrar estadísticas en la consola
-def display_stats(wins, losses):
-    print(f"Wins: {wins} | Losses: {losses}")  # Muestra las estadísticas de victorias y derrotas
+# Resto del código...
 
 def hangman():
     welcome()
     wins, losses = load_stats()
-    #While para seguir jugando si el jugador asi lo quiere
     while True:
         word_to_guess = get_valid_word(palabras)
         word_letters = set(word_to_guess)
@@ -57,7 +52,7 @@ def hangman():
         lives = 6
 
         while lives > 0:
-            print(hangmanASCI[6 - lives])
+            print(hangmanASCI[lives])
 
             current_display = display_word(word_to_guess, guessed_letters)
             print(current_display)
@@ -72,24 +67,24 @@ def hangman():
                     incorrect_guesses.add(guess)
 
                 if set(word_letters).issubset(guessed_letters):
-                    print(hangmanASCI[6 - lives])
-                    print("Congratulations! You guessed the word:", word_to_guess)
+                    print(hangmanASCI[lives])
+                    print(f'{Fore.GREEN}Congratulations! You guessed the word: {word_to_guess}')
                     wins += 1
                     break
             elif guess in guessed_letters:
-                print("You have already guessed that letter, try again.")
+                print(f'{Fore.YELLOW}You have already guessed that letter, try again.')  # Mensaje en amarillo
             else:
-                print("Invalid input. Please enter a valid letter.")
+                print(f'{Fore.RED}Invalid input. Please enter a valid letter.')  # Mensaje en rojo
 
-            print("Lives left:", lives)
+            print(f'Lives left: {Style.BRIGHT}{Fore.CYAN}{lives}')  # Vidas restantes en cyan
 
         if lives == 0:
-            print(hangmanASCI[lives]);
-            print("Sorry, you ran out of lives. The word was:", word_to_guess)
+            print(hangmanASCI[lives])
+            print(f'{Fore.RED}Sorry, you ran out of lives. The word was: {word_to_guess}')
 
         play_again = input("Do you want to play again? (yes/no): ").lower()
         if play_again != 'yes':
-            break               
+            break
 
 if __name__ == "__main__":
     hangman()
