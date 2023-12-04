@@ -24,6 +24,14 @@ def display_word(word, guessed_letters):
 def display_incorrect_guesses(incorrect_guesses):
     return 'Letras incorrectas: ' + ' '.join(incorrect_guesses)
 
+#Muestra al jugador cuántas vidas le quedan de una manera visual
+def display_lives_remaining(lives):
+    return f"Lives remaining: {'❤️ ' * lives}"
+#Muestra un mensaje de cuando el jugador elige una letra incorrecta
+def display_encouragement():
+    encouragements = ["Keep going!", "You can do it!", "Don't give up!"]
+    return random.choice(encouragements)
+
 # Función para cargar estadísticas desde un archivo
 def load_stats():
     try:
@@ -62,6 +70,8 @@ def hangman():
             current_display = display_word(word_to_guess, guessed_letters)
             print(current_display)
             print(display_incorrect_guesses(incorrect_guesses))
+            print(display_lives_remaining(lives))  #Aquí añadí la referencia a display_lives_remaining
+            print(display_encouragement())  #Aquí añadí la referencia a display_encouragement
 
             guess = input("Guess a letter: ").upper()
 
