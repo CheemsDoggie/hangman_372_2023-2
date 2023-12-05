@@ -90,6 +90,7 @@ def hangman():
                 break
 
         display_stats(wins, losses)
+        print("la palabra era: ", word_to_guess)
 
         #Pregunta al usuario si  quiere seguir jugand
         play_again = input("Do you want to play again? (yes/no): ").upper()
