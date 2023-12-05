@@ -28,25 +28,29 @@ def display_incorrect_guesses(incorrect_guesses):
 def load_stats():
     try:
         with open("stats.txt", "r") as file:
-            stats = file.readlines()  
-            wins, losses = map(int, stats)  
-            return wins, losses  
-    except FileNotFoundError:  
-        return 0, 0  
+            stats = file.readlines()
+            # Asegúrate de que hay suficientes valores (rellena con 0 si es necesario)
+            while len(stats) < 4:
+                stats.append("0\n")
+            wins, losses, total_attempts, total_games = map(int, stats)
+            return wins, losses, total_attempts, total_games
+    except FileNotFoundError:
+        return 0, 0, 0, 0
 
 
 # Función para guardar estadísticas en un archivo
-def save_stats(wins, losses):
+def save_stats(wins, losses, total_attempts, total_games):
     with open("stats.txt", "w") as file:
-        file.write(f"{wins}\n{losses}")  
+        file.write(f"{wins}\n{losses}\n{total_attempts}\n{total_games}")
 
 # Función para mostrar estadísticas en la consola
-def display_stats(wins, losses):
-    print(f"Wins: {wins} | Losses: {losses}")  # Muestra las estadísticas de victorias y derrotas
+def display_stats(wins, losses, total_attempts, total_games):
+    average_attempts = total_attempts / total_games if total_games > 0 else 0
+    print(f"Wins: {wins} | Losses: {losses} | Average Attempts: {average_attempts:.2f}")
 
 def hangman():
     welcome()
-    wins, losses = load_stats()
+    wins, losses, total_attempts, total_games = load_stats()
     #While para seguir jugando si el jugador asi lo quiere
     while True:
         word_to_guess = get_valid_word(palabras)
@@ -55,6 +59,7 @@ def hangman():
         guessed_letters = set()
         incorrect_guesses = set()
         lives = 6
+        attempts = 0  # Contador de intentos para este juego
 
         while lives > 0:
             print(hangmanASCI[6 - lives])
@@ -64,6 +69,7 @@ def hangman():
             print(display_incorrect_guesses(incorrect_guesses))
 
             guess = input("Guess a letter: ").upper()
+            attempts += 1
 
             if guess in alphabet - guessed_letters:
                 guessed_letters.add(guess)
@@ -89,12 +95,14 @@ def hangman():
                 losses += 1
                 break
 
-        display_stats(wins, losses)
+        total_attempts += attempts
+        total_games += 1
+        display_stats(wins, losses, total_attempts, total_games)
 
-        #Pregunta al usuario si  quiere seguir jugand
+        #Pregunta al usuario si quiere seguir jugando
         play_again = input("Do you want to play again? (yes/no): ").upper()
         if play_again != "YES":
-            save_stats(wins, losses)
+            save_stats(wins, losses, total_attempts, total_games)
             break
 
 if __name__ == "__main__":
