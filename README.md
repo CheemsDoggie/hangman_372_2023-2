@@ -27,6 +27,15 @@ Improvements:
 1.  Print the man's ascii art
 2.  Improve README.md
 
+# Cambios - Padilla Nancy
+
+Utilice formatos con códigos ANSI para cambiar la apariencia del mensaje de bienvenida, la pregunta para el usuario de si quiere seguin jugando o no y los mensajes de perdiste o ganaste.
+
+```python
+print("\033[3;30;46m"+"--Welcome to the hangman game in Python--"+"\033[0;m")
+```
+Formato ("\033[#_tipoLetra;#_colorLetra;#_colrFondom"+"texto"+"\033[Se pone 0 para indicar que estamos cerrando el formato;m")
+Así.
 
 # Cambios - Bojorges Eddy
 
