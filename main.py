@@ -91,11 +91,10 @@ def hangman():
 
         display_stats(wins, losses)
 
-        #Pregunta al usuario si  quiere seguir jugand
-        play_again = input("Do you want to play again? (yes/no): ").upper()
-        if play_again != "YES":
-            save_stats(wins, losses)
-            break
+        #Pregunta al usuario si  quiere seguir jugando
+        def want_to_play_again():
+    play_again = input("Do you want to play again? (yes/no): ").lower()
+    return play_again == "yes" or play_again == "y"
 
 if __name__ == "__main__":
     hangman()
