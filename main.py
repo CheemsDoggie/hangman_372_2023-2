@@ -4,7 +4,8 @@ from resources import palabras
 from resources import hangmanASCI
 
 def welcome():
-    print("Welcome to the hangman game in Python")
+    # Cambios por Nancy. Color y tipo de letra, y color de fondo
+    print("\033[3;30;46m"+"--Welcome to the hangman game in Python--"+"\033[0;m")
 
 def get_valid_word(words):
     word = random.choice(words)
@@ -73,7 +74,8 @@ def hangman():
 
                 if set(word_letters).issubset(guessed_letters):
                     print(hangmanASCI[6 - lives])
-                    print("Congratulations! You guessed the word:", word_to_guess)
+                    # Cambios por Nancy. Color y tipo de letra, y color de fondo
+                    print("\033[1;32m"+"Congratulations! You guessed the word:"+"\033[0;m", word_to_guess)
                     wins += 1
                     break
             elif guess in guessed_letters:
@@ -85,14 +87,16 @@ def hangman():
 
             if lives == 0:
                 print(hangmanASCI[6 - lives])
-                print("Sorry, you ran out of lives. The word was:", word_to_guess)
+                # Cambios por Nancy. Color y tipo de letra, y color de fondo
+                print("\033[1;31m"+"Sorry, you ran out of lives. The word was:"+"\033[0;m", word_to_guess)
                 losses += 1
                 break
 
         display_stats(wins, losses)
 
         #Pregunta al usuario si  quiere seguir jugand
-        play_again = input("Do you want to play again? (yes/no): ").upper()
+        # Cambios por Nancy. Color y tipo de letra, y color de fondo
+        play_again = input("\033[1;37;44m"+"Do you want to play again? (yes/no): "+"\033[0;m").upper()
         if play_again != "YES":
             save_stats(wins, losses)
             break
