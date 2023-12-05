@@ -3,16 +3,16 @@ import string
 from resources import palabras
 from resources import hangmanASCI
 
-def welcome():
+def welcome(): #funcion que Manda el mensaje inicial
     print("Welcome to the hangman game in Python")
 
-def get_valid_word(words):
+def get_valid_word(words): #funcion que agarra una palabra de los recursos
     word = random.choice(words)
     while '-' in word or ' ' in word:
         word = random.choice(words)
     return word.upper()  # Convertir la palabra a mayúsculas
 
-def display_word(word, guessed_letters):
+def display_word(word, guessed_letters):# funcion que muestra la palabra
     display = 'Word to guess: '
     for letter in word:
         if letter in guessed_letters:
@@ -21,7 +21,7 @@ def display_word(word, guessed_letters):
             display += '_ '
     return display.strip()
 
-def display_incorrect_guesses(incorrect_guesses):
+def display_incorrect_guesses(incorrect_guesses): #muestra los intentos incorrectos
     return 'Letras incorrectas: ' + ' '.join(incorrect_guesses)
 
 # Función para cargar estadísticas desde un archivo
@@ -48,7 +48,8 @@ def hangman():
     welcome()
     wins, losses = load_stats()
     #While para seguir jugando si el jugador asi lo quiere
-    while True:
+    end = False
+    while end != True:
         word_to_guess = get_valid_word(palabras)
         word_letters = set(word_to_guess)
         alphabet = set(string.ascii_uppercase)
@@ -90,12 +91,26 @@ def hangman():
                 break
 
         display_stats(wins, losses)
+        
+        while True:
+            #Pregunta al usuario si  quiere seguir jugando
+            play_again = input("Do you want to play again? (yes/no): ").upper()
+            if play_again == "NO":
+                print("Thank you for playing!")
+                print("Your final score is| Wins: ", wins,"| Losses: ",losses)
+                save_stats(wins, losses)
+                end = True
+                break
 
-        #Pregunta al usuario si  quiere seguir jugand
-        play_again = input("Do you want to play again? (yes/no): ").upper()
-        if play_again != "YES":
-            save_stats(wins, losses)
-            break
+            elif play_again == "YES":
+                break
+
+            else:
+                print("You must write either YES or NO")
+        
+                
+
+        
 
 if __name__ == "__main__":
     hangman()
